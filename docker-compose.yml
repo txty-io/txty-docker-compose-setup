@@ -10,8 +10,8 @@ services:
       - texterify-database:/var/lib/postgresql/data
   app:
     image: chrztoph/texterify:${TEXTERIFY_TAG}
-    environment:
-      - SECRET_KEY_BASE=${TEXTERIFY_SECRET_KEY}
+    env_file:
+      - secrets.env
     depends_on:
       - db
   web:
