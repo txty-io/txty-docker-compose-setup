@@ -3,6 +3,9 @@ volumes:
   texterify-database:
     external:
       name: texterify-database
+  texterify-assets:
+    external:
+      name: texterify-assets
 services:
   db:
     image: postgres
@@ -14,6 +17,8 @@ services:
       - secrets.env
     depends_on:
       - db
+    volumes:
+      - texterify-assets:/var/www/texterify/storage
   web:
     build:
       context: .
