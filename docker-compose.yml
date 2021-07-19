@@ -17,6 +17,7 @@ services:
     image: chrztoph/texterify:${TEXTERIFY_TAG}
     env_file:
       - secrets.env
+      - .env
     depends_on:
       - db
     volumes:
@@ -29,3 +30,14 @@ services:
       - app
     ports:
       - 80:80
+  sidekiq:
+    image: chrztoph/texterify:${TEXTERIFY_TAG}
+    env_file:
+      - secrets.env
+      - .env
+    depends_on:
+      - db
+      - redis
+    command: bundle exec sidekiq
+  redis:
+    image: redis:6.2.0-alpine
