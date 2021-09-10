@@ -1,4 +1,6 @@
-FROM chrztoph/texterify:latest as builder
+ARG BUILDER_IMAGE
+
+FROM $BUILDER_IMAGE as builder
 
 FROM nginx:alpine
 

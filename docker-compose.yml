@@ -26,6 +26,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/web/Dockerfile
+      args:
+        BUILDER_IMAGE: chrztoph/texterify:${TEXTERIFY_TAG}
     depends_on:
       - app
     ports:
