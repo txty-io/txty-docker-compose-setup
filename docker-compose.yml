@@ -1,41 +1,40 @@
-version: '3.7'
 volumes:
-  texterify-database:
-    external:
-      name: texterify-database
-  texterify-assets:
-    external:
-      name: texterify-assets
+  txty-database:
+    name: txty-database
+    external: true
+  txty-assets:
+    name: txty-assets
+    external: true
 services:
   db:
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     image: postgres:12.2
     volumes:
-      - texterify-database:/var/lib/postgresql/data
+      - txty-database:/var/lib/postgresql/data
     ports:
       - "5432:5432"
   app:
-    image: chrztoph/texterify:${TEXTERIFY_TAG}
+    image: chrztoph/texterify:${TXTY_TAG}
     env_file:
       - secrets.env
       - .env
     depends_on:
       - db
     volumes:
-      - texterify-assets:/var/www/texterify/storage
+      - txty-assets:/var/www/app/storage
   web:
     build:
       context: .
       dockerfile: ./docker/web/Dockerfile
       args:
-        BUILDER_IMAGE: chrztoph/texterify:${TEXTERIFY_TAG}
+        BUILDER_IMAGE: chrztoph/texterify:${TXTY_TAG}
     depends_on:
       - app
     ports:
       - 80:80
   sidekiq:
-    image: chrztoph/texterify:${TEXTERIFY_TAG}
+    image: chrztoph/texterify:${TXTY_TAG}
     env_file:
       - secrets.env
       - .env
@@ -44,6 +43,6 @@ services:
       - redis
     command: bundle exec sidekiq
     volumes:
-      - texterify-assets:/var/www/texterify/storage
+      - txty-assets:/var/www/app/storage
   redis:
     image: redis:6.2.0-alpine
